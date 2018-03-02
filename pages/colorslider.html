@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>COLOR SLIDER</title>
+<link rel="stylesheet" type="text/css" href="/css/colorslider.css">
+
+</head>
+<body>
+<script src="/pages/navbar.js"></script>
+
+<div id='heading'></div>
+
+
+<div class="slidecontainer">
+  <input type="range" min="0" max="255"  class="slider" value="0" id="rRange" onmouseup="mouseUp()">
+  <p>Red Value: <span id="routvalue"></span></p>
+</div>
+<div class="slidecontainer">
+  <input type="range" min="0" max="255"  class="slider" value="0" id="gRange" onmouseup="mouseUp()">
+  <p>Green Value: <span id="goutvalue"></span></p>
+</div>
+<div class="slidecontainer">
+  <input type="range" min="0" max="255"  class="slider" value="0" id="bRange" onmouseup="mouseUp()">
+  <p>Blue Value: <span id="boutvalue"></span></p>
+</div>
+
+
+<script src="/javascript/colorslider.js"></script>
+</body>
+</html>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){ 
+	$('body').find('img[src$="https://cdn.rawgit.com/000webhost/logo/e9bd13f7/footer-powered-by-000webhost-white2.png"]').remove();
+    }); 
+</script>

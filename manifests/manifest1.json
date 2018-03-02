@@ -1,0 +1,17 @@
+{
+ "name": "Remote Control", 
+ "short_name": "Remote", 
+ "description": "This site is easy way to get statistics of your GTPL data usage. ", 
+ "orientation": "portrait", 
+ "display": "standalone", 
+ "background_color": "#0011ff", 
+ "theme_color": "#0011ff", 
+ "icons": [
+	{"src": "/icons/gameremote144.png", 
+	 "sizes": "144x144", 
+	 "type": "image/png"},
+	{"src": "/icons/gameremote192.png",
+     "sizes": "192x192", 
+	 "type": "image/png"}
+	 ]
+}

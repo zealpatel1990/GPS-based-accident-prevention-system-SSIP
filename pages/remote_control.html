@@ -1,0 +1,139 @@
+<html>
+<head>
+<!--this is zorr thing,this directly make website in web application, by adding it on home screen in phone-->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Remote Control</title>
+<meta name="theme-color" content="#0011ff">
+<link rel="stylesheet" type="text/css" href="/css/slider.css">
+<link rel="stylesheet" type="text/css" href="/css/checkbox.css">
+<link rel="manifest" href="/manifests/manifest1.json">
+<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+
+<div class="slidecontainer" id='left_slidecontainer'>
+  <input type="range" min="-255" max="255"  class="slider" id="slider" >
+  <span id="outvalue"></span>
+</div>
+<div class="slidecontainer2 slidecontainer" id="right_slidecontainer">
+  <input type="range" min="-255" max="255"  class="slider" id="slider2">
+  <span id="outvalue2"></span>
+</div>
+
+<div id='acceleration_values'><br><br>
+Forward power :&nbsp&nbsp<span id='yaxis'></span><br><br>
+Turning power :&nbsp&nbsp    <span id='xaxis'></span>
+</div>
+
+
+
+
+<label class="switch">
+  <input id="on_off" type="checkbox">
+  <span class="checkbox" id="on_off_checkbox">OFF</span>
+</label>
+
+<script>
+var socket = io();
+var on_off = document.getElementById('on_off');
+var on_off_checkbox= document.getElementById('on_off_checkbox');
+if(on_off.checked){on_off_checkbox.innerHTML='ON';
+screen.orientation.lock('portrait');
+socket.emit('remote_mode',Number(on_off.checked));
+document.getElementById("acceleration_values").style.display = "inline";}
+else{on_off_checkbox.innerHTML='OFF';
+screen.orientation.lock('landscape');
+socket.emit('remote_mode',Number(on_off.checked));
+socket.emit('left_slider', 0);
+socket.emit('right_slider', 0);
+document.getElementById("acceleration_values").style.display = "none";}
+
+on_off.onclick = function(){
+	if(on_off.checked){
+		on_off_checkbox.innerHTML='ON';
+		screen.orientation.lock('portrait');
+		socket.emit('remote_mode',Number(on_off.checked));
+		document.getElementById("left_slidecontainer").style.display = "none";
+		document.getElementById("right_slidecontainer").style.display = "none";
+		document.getElementById("acceleration_values").style.display = "inline";
+	}
+	else{
+		on_off_checkbox.innerHTML='OFF';
+		screen.orientation.lock('landscape');
+		socket.emit('remote_mode',Number(on_off.checked));
+		socket.emit('left_slider', 0);
+		socket.emit('right_slider', 0);
+		document.getElementById("right_slidecontainer").style.display = "inline";
+		document.getElementById("left_slidecontainer").style.display = "inline";
+		document.getElementById("acceleration_values").style.display = "none";
+	}
+}
+
+if(window.DeviceMotionEvent){
+			window.addEventListener("devicemotion", motion, false);
+		}else{
+			console.log("DeviceMotionEvent is not supported");}
+			
+function motion(event){
+	if (on_off.checked ){
+	socket.emit('accx', event.accelerationIncludingGravity.x.toFixed(4));
+	document.getElementById("xaxis").innerHTML = -event.accelerationIncludingGravity.x.toFixed(2);
+	socket.emit('accy', event.accelerationIncludingGravity.y.toFixed(4));
+	document.getElementById("yaxis").innerHTML = -event.accelerationIncludingGravity.y.toFixed(2);
+	socket.emit('accz', event.accelerationIncludingGravity.z.toFixed(4));
+
+}};
+
+/////FROM HERE SLIDER JS START
+
+var slider = document.getElementById('slider');
+var slider2 = document.getElementById('slider2');
+document.getElementById("outvalue").innerHTML = slider.value;
+document.getElementById("outvalue2").innerHTML = slider2.value;
+
+slider.oninput = function(){
+	document.getElementById("outvalue").innerHTML = this.value;
+	socket.emit('left_slider', this.value);
+}
+slider2.oninput = function(){
+	document.getElementById("outvalue2").innerHTML = this.value;
+	socket.emit('right_slider', this.value);
+
+}
+slider.addEventListener("touchend", function(event){slider.value=0;	document.getElementById("outvalue").innerHTML = slider.value;socket.emit('left_slider', 0);}, false);
+slider2.addEventListener("touchend", function(event){slider2.value=0;	document.getElementById("outvalue2").innerHTML = slider2.value;	socket.emit('right_slider', 0);}, false);
+
+//////HERE SLIDER JS END
+</script>
+
+
+<link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.css">
+<i class="fa fa-window-maximize" aria-hidden="true" id="goFS" style="position:fixed;top:0px;right:0px;"></i>
+<script>
+  var goFS = document.getElementById("goFS");
+  goFS.addEventListener("click", function() {
+  var doc = window.document;
+  var docEl = doc.documentElement;
+  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl);
+  }
+  else {
+    cancelFullScreen.call(doc);
+  }
+});
+</script>  
+</body>
+</html>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){ 
+	$('body').find('img[src$="https://cdn.rawgit.com/000webhost/logo/e9bd13f7/footer-powered-by-000webhost-white2.png"]').remove();
+    }); 
+</script>
