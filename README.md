@@ -1,2 +1,2 @@
-# ssip
-ssip webapplication first project
+
+ssip project
