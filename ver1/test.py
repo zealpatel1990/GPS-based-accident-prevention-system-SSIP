@@ -1,54 +1,35 @@
 import serial
-import RPi.GPIO as GPIO      
-import os, time
-from decimal import *
- 
-delay = 1
- 
-GPIO.setmode(GPIO.BOARD)    
- 
-def find(str, ch):
-    for i, ltr in enumerate(str):
-        if ltr == ch:
-            yield i
- 
-port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
-cd=1
-while cd <= 50:
-    ck=0
-    fd=''
-    while ck <= 50:
-        rcv = port.read(10)
- 
-        fd=fd+rcv
-        ck=ck+1
- 
-    #print fd
-    if '$GPRMC' in fd:
-        ps=fd.find('$GPRMC')
-        dif=len(fd)-ps
-        #print dif
-        if dif > 50:
-            data=fd[ps:(ps+50)]
-            print data
-            p=list(find(data, ","))
-            lat=data[(p[2]+1):p[3]]
-            lon=data[(p[4]+1):p[5]]
- 
-            s1=lat[2:len(lat)]
-            s1=Decimal(s1)
-            s1=s1/60
-            s11=int(lat[0:2])
-            s1=s11+s1
- 
-            s2=lon[3:len(lon)]
-            s2=Decimal(s2)
-            s2=s2/60
-            s22=int(lon[0:3])
-            s2=s22+s2
- 
-            print s1
-            print s2   
- 
-    cd=cd+1
-    print cd
+from time import sleep
+
+ser = serial.Serial ("/dev/ttyAMA0", 9600)
+while True:
+    try:
+        data = ser.readline()              #read serial port
+        if data.find('GPGGA') != -1:
+            ggadata = data.split(',')
+            utcrawtimeg = ggadata[1]
+            latg = float(ggadata[2][:2])+(float(ggadata[2][2:])/60)
+            longg = float(ggadata[4][:3])+(float(ggadata[4][3:])/60)
+            if data[3]=='S':
+                latg = -1*latg
+            if data[5]=='W':
+                longg = -1*longg
+            print 'Time in UTC',utcrawtimeg[:2]+':'+utcrawtimeg[2:4]+':'+utcrawtimeg[4:]
+            print 'latitude:',latg,'longitude:' ,longg
+        elif data.find('GPRMC') != -1:
+            rmcdata = data.split(',')
+            utcrawtimer = rmcdata[1]
+            latr = float(rmcdata[3][:2])+(float(rmcdata[3][2:])/60)
+            longr = float(rmcdata[5][:3])+(float(rmcdata[5][3:])/60)
+            if data[4]=='S':
+                latr = -1*latr
+            if data[6]=='W':
+                longr = -1*longr
+            print latr,longr
+        elif data.find('GPVTG') != -1:
+            vtgdata = data.split(',')
+            speedv= vtgdata[7]
+            print 'speed : ',speedv,"km/h\n"
+    except:
+        print ("Searching GPS signal")
+        continue
