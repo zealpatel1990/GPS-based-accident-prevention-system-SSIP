@@ -1,3 +1,11 @@
+"""
+my calculations: 1.25mm per revolution
+16rps  2cm(linear motion)  3200steps/s-- time diff bet step=0.0003125
+8rps   1cm(linear motion)  1600steps/s-- time diff bet step=0.000625
+4rps  0.5cm(linear motion)  800steps/s-- time diff bet step=0.00125
+2rps   0.25cm(linear motion)  400steps/s-- time diff bet step=0.0025
+ """
+
 from time import sleep
 import RPi.GPIO as gpio
 class stepper:
@@ -26,11 +34,11 @@ class stepper:
 		gpio.output(self.directionPin, turnLeft)
 
 		stepCounter = 0
-		waitTime = 0.005
+		waitTime = 0.005/speed ###THIS VALUE CHANGES SPEED
 
 		while stepCounter < steps:
 			gpio.output(self.stepPin, True)
-			sleep(0.0001)
+			sleep(0.0001) #####PAY ATTENTION HERE
 			gpio.output(self.stepPin, False)
 			stepCounter += 1
 			sleep(waitTime)
@@ -40,10 +48,3 @@ class stepper:
 
 		print("stepperDriver complete (turned " + dir + " " + str(steps) + " steps)")
 	gpio.cleanup()		
-"""
-my calculations: 1.25mm per revolution
-16rps  2cm(linear motion)  3200steps/s-- time diff bet step=0.0003125
-8rps   1cm(linear motion)  1600steps/s-- time diff bet step=0.000625
-4rps  0.5cm(linear motion)  800steps/s-- time diff bet step=0.00125
-2rps   0.25cm(linear motion)  400steps/s-- time diff bet step=0.0025
- """
