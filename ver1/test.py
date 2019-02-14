@@ -5,10 +5,11 @@ from time import sleep
 thresold = 0.0005 #in degree i.e.  approx 55meter
 testco = [[23.107804, 72.594511],[23.106114, 72.595450]] #1 location is M block and second is A block
 testspeed = [35,25]
-ser = serial.Serial ("/dev/ttyAMA0", 9600)
+#ser = serial.Serial ("/dev/ttyAMA0", 9600)
 while True:
     try:
-        data = ser.readline()              #read serial port
+        data = raw_input()
+#        data = ser.readline()              #read serial port
         if data.find('GPGGA') != -1:
             ggadata = data.split(',')
             utcrawtimeg = ggadata[1]
@@ -34,23 +35,17 @@ while True:
             vtgdata = data.split(',')
             speedv= float(vtgdata[7])
             print 'speed : ',speedv,"km/h\n"
-	if (testco[0][0]-thresold)<latg<(testco[0][0]+thresold) and (testco[0][1]-thresold)<longg<(testco[0][1]+thresold):
+        if (testco[0][0]-thresold)<latg<(testco[0][0]+thresold) and (testco[0][1]-thresold)<longg<(testco[0][1]+thresold):
 	    #you are location 1 enter your control code
-	    print speedv,testspeed
- 	    if speedv>testspeed[0]:
-	        print "over speeding at loc 1"
-#		pygame.mixer.init()
-#		pygame.mixer.music.load("test.mp3")
-#		pygame.mixer.music.play()
-#		sleep(2)
-	if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
+            print speedv,testspeed
+            if speedv>testspeed[0]:
+                print "over speeding at loc 1"
+			
+        if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
 	    #you are location 2 enter your code here
-	    print testspeed,speedv
-	    if speedv>testspeed[1]:
-		print "Over speeding at loc 2"
-#		pygame.mixer.music.load("test.mp3")
-#               pygame.mixer.music.play()
-#              sleep(2)
+            print testspeed,speedv
+            if speedv>testspeed[1]:
+                print "Over speeding at loc 2"
     except:
         print ("Searching GPS signal")
         continue
