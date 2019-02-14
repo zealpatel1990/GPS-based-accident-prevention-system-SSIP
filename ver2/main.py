@@ -35,18 +35,17 @@ while True:
             vtgdata = data.split(',')
             speedv= float(vtgdata[7])
             print 'speed : ',speedv,"km/h\n"
-            if (testco[0][0]-thresold)<latg<(testco[0][0]+thresold) and (testco[0][1]-thresold)<longg<(testco[0][1]+thresold):
-                #you are location 1 enter your control code
-                print speedv,testspeed
-                if speedv>testspeed[0]:
-                    print "over speeding at loc 1"
-                            
-            if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
-                #you are location 2 enter your code here
-                print testspeed,speedv
-                if speedv>testspeed[1]:
-                    print "Over speeding at loc 2"
-        sleep(0.02)
+        if (testco[0][0]-thresold)<latg<(testco[0][0]+thresold) and (testco[0][1]-thresold)<longg<(testco[0][1]+thresold):
+	    #you are location 1 enter your control code
+            print speedv,testspeed
+            if speedv>testspeed[0]:
+                print "over speeding at loc 1"
+			
+        if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
+	    #you are location 2 enter your code here
+            print testspeed,speedv
+            if speedv>testspeed[1]:
+                print "Over speeding at loc 2"
     except:
         print ("Searching GPS signal")
         continue
