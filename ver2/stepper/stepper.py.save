@@ -61,7 +61,7 @@ my calculations: 1.25mm per revolution
 4rps  0.5cm(linear motion)  800steps/s-- time diff bet step=0.00125
 2rps   0.25cm(linear motion)  400steps/s-- time diff bet step=0.0025
                 """
-		waitTime = 0.007/speed #waitTime controls speed
+		waitTime = 0.001/speed #waitTime controls speed
 
 		while stepCounter < steps:
 			#gracefully exit if ctr-c is pressed

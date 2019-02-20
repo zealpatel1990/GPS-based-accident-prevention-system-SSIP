@@ -1,14 +1,15 @@
 import serial
 import pygame
 from time import sleep
+from stepper import stepper
 
 #pygame.mixer.init()
 thresold = 0.0005 #in degree i.e.  approx 55meter
 testco = [[23.107804, 72.594511],[23.106114, 72.595450]] #1 location is M block and second is A block
 testspeed = [35,25]
+#[stepPin, directionPin, enablePin]
+testStepper = stepper([3,5,7]) #gpio board
 
-#from stepper import stepper
-#stper= stepper([22, 17, 23]) #[stepPin, directionPin, enablePin]STEPPER
 
 #ser = serial.Serial ("/dev/ttyAMA0", 9600)
 while True:
@@ -45,13 +46,14 @@ while True:
                 #print speedv,testspeed
                 if speedv>testspeed[0]:
                     print "^^^^^^^OVER SPEEDING AT LOCATION 1^^^^^^^^\n"
-                    #stper.step(3200, "right"); #steps, dir, speed, stayOn
-                            
+		    testStepper.step(1000, "right")
+          
             if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
                 #you are location 2 enter your code here
                 print testspeed,speedv
                 if speedv>testspeed[1]:
-                    print "OVER SPEEDING AT LOCATION 2\n\n"
+                    print "^^^^^^^^OVER SPEEDING AT LOCATION 2^^^^^^^^\n"
+		    testStepper.step(1000, "right")
         sleep(0.02)
     except KeyboardInterrupt:
         print ("\n\n*******************\nQuiting Program")

@@ -19,7 +19,7 @@ class stepper:
 		self.enablePin = self.pins[2]
 		
 		#use the broadcom layout for the gpio
-		gpio.setmode(gpio.BCM)
+		gpio.setmode(gpio.BOARD)
 		
 		#set gpio pins
 		gpio.setup(self.stepPin, gpio.OUT)
@@ -55,7 +55,7 @@ class stepper:
 
 		stepCounter = 0
 	
-		waitTime = 0.000001/speed #waitTime controls speed
+		waitTime = 0.007/speed #waitTime controls speed
 
 		while stepCounter < steps:
 			#gracefully exit if ctr-c is pressed
