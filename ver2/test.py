@@ -2,7 +2,7 @@ import serial
 import pygame
 from time import sleep
 from stepper import stepper
-
+from gsm_lib import*
 #pygame.mixer.init()
 thresold = 0.0005 #in degree i.e.  approx 55meter
 testco = [[23.107804, 72.594511],[23.106114, 72.595450]] #1 location is M block and second is A block
@@ -10,7 +10,7 @@ testspeed = [35,25]
 #[stepPin, directionPin, enablePin]
 testStepper = stepper([3,5,7]) #gpio board
 
-
+vehicle_no = "GJ01ABXXXX"
 #ser = serial.Serial ("/dev/ttyAMA0", 9600)
 while True:
     try:
@@ -41,13 +41,14 @@ while True:
             vtgdata = data.split(',')
             speedv= float(vtgdata[7])
             print 'speed : ',speedv,"km/h"
+	    content = vehicle_no+', lat:'+str(latg)+', long:'+str(longg)+', speed:'+str(speedv)
             if (testco[0][0]-thresold)<latg<(testco[0][0]+thresold) and (testco[0][1]-thresold)<longg<(testco[0][1]+thresold):
                 #you are location 1 enter your control code
                 #print speedv,testspeed
                 if speedv>testspeed[0]:
                     print "^^^^^^^OVER SPEEDING AT LOCATION 1^^^^^^^^\n"
 		    testStepper.step(1000, "right")
-          
+          	    send_sms(content)
             if (testco[1][0]-thresold)<latg<(testco[1][0]+thresold) and (testco[1][1]-thresold)<longg<(testco[1][1]+thresold):
                 #you are location 2 enter your code here
                 print testspeed,speedv
