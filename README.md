@@ -1,2 +1,4 @@
+# GPS based accident prevention system
 
-ssip project
+We build embeedded system using Raspberry Pi, GPS module, Stepper Motor, and GSM module.
+
